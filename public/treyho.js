@@ -309,10 +309,22 @@ function editCard(e){
 	newCardTitle.setAttribute("class", "list-title");
 	newCardTitle.setAttribute("id", "title-value");
 	newCardTitle.setAttribute("value", cardTitle.innerText);
-	card.insertBefore(newCardTitle, cardEditBtn);	
+	card.insertBefore(newCardTitle, card.children[0]);	
 	cardEditBtn.setAttribute("value", "submit");
 	card.removeChild(cardTitle);	
-	cardEditBtn.onclick = setListTitle;
+	cardEditBtn.onclick = setCard;
+
+	const cardDesc = card.children[2];
+	console.log(cardDesc)
+
+	var cardDescription = document.createElement("textarea");
+	cardDescription.setAttribute("class", "card-desc");
+	cardDescription.setAttribute("id", "c-desc-value");
+	cardDescription.innerHTML = card.innerText;
+
+	card.insertBefore(cardDescription, cardEditBtn);	
+	card.removeChild(cardDesc);	
+	
 };
 function setListTitle(){
 	let slTitleBtn = this;
@@ -347,21 +359,7 @@ function editSlTitle(e){
 	swimlane.removeChild(swimlaneTitle);	
 	editButton.onclick = setListTitle;
 };
-function setDescription(){
-	
-};
 function editCDesc(e){
 
-	const editButton = e.target;
-	const card = editButton.parentNode;
-	const cardDesc = card.children[3];
-
-	var cardDescription = document.createElement("textarea");
-	cardDescription.setAttribute("class", "card-desc");
-	cardDescription.setAttribute("id", "c-desc-value");
-	cardDescription.innerHTML = card.innerText;
-	card.insertBefore(cardDescription, editButton);	
-	editButton.setAttribute("value", "submit");
-	card.removeChild(cardDesc);	
-	editButton.onclick = setDescription;
+	
 }
