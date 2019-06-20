@@ -1,6 +1,10 @@
 'use strict'
 let swimlaneID = 0; 
 let cardID = 0;
+const slURL = "http://localhost:3000/swimlanes"
+const cardsURL = "http://localhost:3000/cards"
+let cardsArr = [];
+let swimlaneArr = [];
 
 function addList() {
 	swimlaneID++;
@@ -61,6 +65,7 @@ function addList() {
 	btnMoveSwimlaneRight.setAttribute("data-direction", "right");
 	btnMoveSwimlaneRight.addEventListener("click", moveSwimlane);
 	swimlane.appendChild(btnMoveSwimlaneRight);
+
 }
 function deleteSwimlane() {
 	let slid = this.dataset.swimlaneId;
@@ -131,14 +136,6 @@ function addCard() {
 	cardTitle.setAttribute("placeholder", "Enter Card Title here")
 	card.appendChild(cardTitle);
 
-	var cardTitleBtn = document.createElement("input");
-	cardTitleBtn.setAttribute("type", "button");
-	cardTitleBtn.setAttribute("id", "card-title" + cID);
-	cardTitleBtn.setAttribute("value", "submit");
-	cardTitleBtn.addEventListener("click", setCardTitle);
-	cardTitleBtn.innerHTML = "<br>";
-	card.appendChild(cardTitleBtn);
-
 	var cardButtons = document.createElement("div");
 	cardButtons.setAttribute("class", "card-buttons");
 
@@ -197,7 +194,7 @@ function addCard() {
 	descSubmitBtn.setAttribute("id", "desc-submit-btn" + cardID);
 	descSubmitBtn.setAttribute("value", "submit");
 	descSubmitBtn.setAttribute("type", "button");
-	descSubmitBtn.addEventListener("click", setDescription);
+	descSubmitBtn.addEventListener("click", setCard);
 	card.appendChild(descSubmitBtn);
 
 
@@ -271,7 +268,7 @@ function moveCard(e) {
 		
 	}
 };
-function setCardTitle(){
+function setCard(){
 	let cTitleBtn = this;
 	let card = this.parentElement;
 	let cTitle = card.firstChild;
@@ -282,17 +279,28 @@ function setCardTitle(){
 
 	let cardEditBtn = document.createElement("input");
 	cardEditBtn.setAttribute("type", "button");
-	cardEditBtn.setAttribute("value", "Edit Card Title");
-	cardEditBtn.setAttribute("onclick", "editCardTitle(event)");
+	cardEditBtn.setAttribute("value", "Edit Card");
+	cardEditBtn.setAttribute("onclick", "editCard(event)");
 
 	cTitleBtn.innerHTML = "<br";
 
-	card.insertBefore(setCTitle, cTitleBtn);
+	card.insertBefore(setCTitle, cTitle);
+
+	var cardDesc = card.children[3];
+	var cardDescTxt = cardDesc.value;
+	var cardDescription = document.createElement("p");
+	cardDescription.setAttribute("class", "card-desc");
+	cardDescription.innerHTML = cardDescTxt;
+
+	card.insertBefore(cardDescription, cTitleBtn);
+
 	card.replaceChild(cardEditBtn, cTitleBtn);
 
-	cTitle.parentNode.removeChild(cTitle);	
+	cTitle.parentNode.removeChild(cTitle);
+
+	cardDesc.parentNode.removeChild(cardDesc);
 };
-function editCardTitle(e){
+function editCard(e){
 	const cardEditBtn = e.target;
 	const card = cardEditBtn.parentNode;
 	const cardTitle = card.firstChild;
@@ -340,23 +348,7 @@ function editSlTitle(e){
 	editButton.onclick = setListTitle;
 };
 function setDescription(){
-	let cardDescBtn = this;
-	let card = this.parentElement;
-	var cardDesc = card.children[3];
-	var cardDescTxt = cardDesc.value;
-	var cardDescription = document.createElement("p");
-	cardDescription.setAttribute("class", "card-desc");
-	cardDescription.innerHTML = cardDescTxt;
-
-	var cDescBtn = document.createElement("input");
-	cDescBtn.setAttribute("type", "button");
-	cDescBtn.setAttribute("value", "Edit This Description");
-	cDescBtn.setAttribute("onclick", "editCDesc(event)");
-
-	card.insertBefore(cardDescription, cardDescBtn);
-	card.replaceChild(cDescBtn, cardDescBtn);
-
-	cardDesc.parentNode.removeChild(cardDesc);
+	
 };
 function editCDesc(e){
 

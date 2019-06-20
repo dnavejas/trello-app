@@ -2,12 +2,29 @@ const express = require('express')
 const app = express()
 const port = 3000;
 const bodyParser = require('body-parser');
+const multer = require('multer');
+const upload = multer();
 
 app.use(express.static('static'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(express.json());
 app.use(express.urlencoded());
+app.use(upload.array()); 
+app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.get('/', function(req, res){
+    res.render('form');
+});
+ 
+app.set('view engine', 'pug');
+app.set('views', './views');
+
+app.post('/', function(req, res){
+console.log(req.body);
+res.send("recieved your request!");
+});
 
 let cards = [];
 
