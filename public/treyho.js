@@ -269,10 +269,11 @@ function moveCard(e) {
 	}
 };
 function setCard(){
-	let cTitleBtn = this;
+	let cardBtn = this;
 	let card = this.parentElement;
-	let cTitle = card.firstChild;
-	let cTitleTxt = cTitle.value;
+	let swimlane = card.parentElement.id;
+	let cardTitle = card.firstChild;
+	let cTitleTxt = cardTitle.value;
 	let setCTitle = document.createElement("h3");
 	setCTitle.setAttribute("class", "c-title");
 	setCTitle.innerHTML = cTitleTxt;
@@ -282,9 +283,9 @@ function setCard(){
 	cardEditBtn.setAttribute("value", "Edit Card");
 	cardEditBtn.setAttribute("onclick", "editCard(event)");
 
-	cTitleBtn.innerHTML = "<br";
+	cardBtn.innerHTML = "<br";
 
-	card.insertBefore(setCTitle, cTitle);
+	card.insertBefore(setCTitle, cardTitle);
 
 	var cardDesc = card.children[3];
 	var cardDescTxt = cardDesc.value;
@@ -292,13 +293,26 @@ function setCard(){
 	cardDescription.setAttribute("class", "card-desc");
 	cardDescription.innerHTML = cardDescTxt;
 
-	card.insertBefore(cardDescription, cTitleBtn);
-
-	card.replaceChild(cardEditBtn, cTitleBtn);
-
-	cTitle.parentNode.removeChild(cTitle);
-
+	card.insertBefore(cardDescription, cardBtn);
+	card.replaceChild(cardEditBtn, cardBtn);
+	cardTitle.parentNode.removeChild(cardTitle);
 	cardDesc.parentNode.removeChild(cardDesc);
+
+	let url = cardsURL;
+	let data = {"cardName": cTitleTxt, "cardDesc": cardDescTxt, "cardID": card.id, "swimlane": swimlane};
+	let dataType = "json";
+
+	$.ajax({
+		type: "POST",
+		url: url,
+		data: data,
+		success: function(res) {
+			console.log(res);
+		},
+		dataType: dataType
+	})
+	cardsArr.push(card);
+	console.log(cardsArr);
 };
 function editCard(e){
 	const cardEditBtn = e.target;
@@ -315,7 +329,6 @@ function editCard(e){
 	cardEditBtn.onclick = setCard;
 
 	const cardDesc = card.children[2];
-	console.log(cardDesc)
 
 	var cardDescription = document.createElement("textarea");
 	cardDescription.setAttribute("class", "card-desc");
@@ -359,7 +372,3 @@ function editSlTitle(e){
 	swimlane.removeChild(swimlaneTitle);	
 	editButton.onclick = setListTitle;
 };
-function editCDesc(e){
-
-	
-}
